@@ -5,6 +5,7 @@ import { useWorkspaceStore } from "@/app/store/workspaceStore";
 import { useDataStore } from "@/app/store/dataStore";
 import { getReportSummary, getMonthlyTrend } from "@/app/lib/api";
 import { API_URL } from "@/app/lib/constants";
+import UpgradeModal from "@/app/components/UpgradeModal";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import DateFilter from "@/app/components/DateFilter";
 
@@ -42,12 +43,15 @@ export default function ReportsPage() {
     const [summary, setSummary] = useState<ReportSummary | null>(null);
     const [monthlyTrend, setMonthlyTrend] = useState<MonthlyData[]>([]);
     const [loading, setLoading] = useState(true);
+    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+    const [isPremiumBlocked, setIsPremiumBlocked] = useState(false);
 
     const loadReports = useCallback(async () => {
         if (!currentWorkspace) return;
         
         setLoading(true);
         try {
+            // Intentar cargar resumen
             const summaryData = await getReportSummary(
                 API_URL, 
                 currentWorkspace.id, 
@@ -56,10 +60,20 @@ export default function ReportsPage() {
             );
             setSummary(summaryData);
             
+            // Intentar cargar tendencia
             const trendData = await getMonthlyTrend(API_URL, currentWorkspace.id, 6);
             setMonthlyTrend(trendData);
+            setIsPremiumBlocked(false);
         } catch (error) {
-            console.error("Error al cargar reportes:", error);
+            // Manejar error 403 (Premium required)
+            if ((error as Error & { status?: number })?.status === 403) {
+                setIsPremiumBlocked(true);
+                setShowUpgradeModal(true);
+                setSummary(null);
+                setMonthlyTrend([]);
+            } else {
+                console.error("Error al cargar reportes:", error);
+            }
         } finally {
             setLoading(false);
         }
@@ -75,6 +89,19 @@ export default function ReportsPage() {
         return (
             <div className="p-6">
                 <p className="text-muted-foreground">Selecciona un workspace para ver reportes</p>
+            </div>
+        );
+    }
+
+    if (isPremiumBlocked) {
+        return (
+            <div className="p-6">
+                <div className="max-w-md mx-auto py-12 text-center">
+                    <h2 className="text-2xl font-bold mb-2">🔒 Reportes Avanzados</h2>
+                    <p className="text-muted-foreground mb-6">
+                        Esta función requiere plan Premium para acceder a reportes avanzados y análisis detallado.
+                    </p>
+                </div>
             </div>
         );
     }
@@ -107,13 +134,22 @@ export default function ReportsPage() {
         <div className="p-6 space-y-6">
             <h1 className="text-3xl font-bold text-foreground">📊 Reportes</h1>
             
-            <DateFilter />
-
-            {summary && (
+            {isPremiumBlocked ? (
+                <div className="max-w-md mx-auto py-12 text-center">
+                    <h2 className="text-xl font-bold mb-2">🔒 Reportes Avanzados</h2>
+                    <p className="text-muted-foreground mb-6">
+                        Esta función requiere plan Premium para acceder a reportes avanzados y análisis detallado.
+                    </p>
+                </div>
+            ) : (
                 <>
-                    {/* Tarjetas de resumen */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className="bg-card p-6 rounded-lg border border-border">
+                    <DateFilter />
+
+                    {summary && (
+                        <>
+                            {/* Tarjetas de resumen */}
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div className="bg-card p-6 rounded-lg border border-border">
                             <p className="text-muted-foreground text-sm">Total Gastado</p>
                             <p className="text-2xl font-bold text-foreground">${summary.total_spent.toFixed(2)}</p>
                             {summary.previous_period && (
@@ -269,8 +305,16 @@ export default function ReportsPage() {
                             </div>
                         </div>
                     </div>
+                    </>
+                )}
                 </>
             )}
+            
+            <UpgradeModal
+                isOpen={showUpgradeModal}
+                onClose={() => setShowUpgradeModal(false)}
+                featureName="Reportes Avanzados"
+            />
         </div>
     );
 }

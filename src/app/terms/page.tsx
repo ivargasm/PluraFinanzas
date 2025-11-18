@@ -60,7 +60,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold mb-4">5. Workspaces Colaborativos</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>El creador de un workspace es el "owner"</li>
+              <li>El creador de un workspace es el &quot;owner&quot;</li>
               <li>Los owners pueden invitar, remover miembros y eliminar el workspace</li>
               <li>Al unirte a un workspace, otros miembros verán tus transacciones en ese espacio</li>
               <li>Si eliminas un workspace, se eliminan todos sus datos</li>
@@ -69,7 +69,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-2xl font-bold mb-4">6. Limitación de Responsabilidad</h2>
-            <p>PluraFinanzas se proporciona "tal cual". No garantizamos:</p>
+            <p>PluraFinanzas se proporciona &quot;tal cual&quot;. No garantizamos:</p>
             <ul className="list-disc pl-6 space-y-1 mt-2">
               <li>Disponibilidad ininterrumpida del servicio</li>
               <li>Ausencia total de errores</li>

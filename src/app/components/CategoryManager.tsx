@@ -77,7 +77,7 @@ export default function CategoryManager() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Gestionar Categorías</Button>
+        <Button variant="outline" size="sm" className="text-xs md:text-sm hover:text-info">📂 <span className=" md:inline">Categorías</span></Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -103,7 +103,7 @@ export default function CategoryManager() {
                       className="flex-1"
                       autoFocus
                     />
-                    <Button size="sm" onClick={() => handleUpdate(category.id)}>
+                    <Button size="sm" onClick={() => handleUpdate(Number(category.id))}>
                       Guardar
                     </Button>
                     <Button variant="outline" size="sm" onClick={cancelEdit}>
@@ -113,10 +113,10 @@ export default function CategoryManager() {
                 ) : (
                   <>
                     <span className="flex-1">{category.name}</span>
-                    <Button variant="outline" size="sm" onClick={() => startEdit(category.id, category.name)}>
+                    <Button variant="outline" size="sm" onClick={() => startEdit(Number(category.id), category.name)}>
                       Editar
                     </Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(category.id)}>
+                    <Button variant="destructive" size="sm" onClick={() => handleDelete(Number(category.id))}>
                       Eliminar
                     </Button>
                   </>

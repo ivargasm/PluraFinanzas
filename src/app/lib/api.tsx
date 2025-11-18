@@ -1,5 +1,9 @@
 import { redirect } from "next/navigation";
 
+interface CustomError extends Error {
+    status?: number;
+}
+
 export const fetchUser = async (url: string) => {
     const res = await fetch(`${url}/auth/me`, { credentials: 'include' });
     if (!res.ok) redirect("/auth/login");;
@@ -244,6 +248,13 @@ export async function exportTransactionsCSV(url: string, workspaceId: number, st
     if (endDate) endpoint += `&end_date=${endDate}`;
     
     const res = await fetch(endpoint, { credentials: 'include' });
+    
+    if (res.status === 403) {
+        const error: CustomError = new Error('Premium required');
+        error.status = 403;
+        throw error;
+    }
+    
     if (!res.ok) throw new Error('Error al exportar datos');
     
     const blob = await res.blob();
@@ -264,6 +275,13 @@ export async function getReportSummary(url: string, workspaceId: number, startDa
     if (endDate) endpoint += `&end_date=${endDate}`;
     
     const res = await fetch(endpoint, { credentials: 'include' });
+    
+    if (res.status === 403) {
+        const error: CustomError = new Error('Premium required');
+        error.status = 403;
+        throw error;
+    }
+    
     if (!res.ok) throw new Error('Error al obtener resumen');
     return res.json();
 }
@@ -272,6 +290,42 @@ export async function getMonthlyTrend(url: string, workspaceId: number, months: 
     const res = await fetch(`${url}/reports/monthly-trend?workspace_id=${workspaceId}&months=${months}`, {
         credentials: 'include',
     });
+    
+    if (res.status === 403) {
+        const error: CustomError = new Error('Premium required');
+        error.status = 403;
+        throw error;
+    }
+    
     if (!res.ok) throw new Error('Error al obtener tendencia');
+    return res.json();
+}
+
+// Payments - Stripe
+export async function createCheckoutSession(url: string) {
+    const res = await fetch(`${url}/payments/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+        body: JSON.stringify({}),
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.detail || 'Error al crear sesión de pago');
+    }
+    return res.json();
+}
+
+export async function cancelSubscription(url: string) {
+    const res = await fetch(`${url}/payments/cancel-subscription`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+        body: JSON.stringify({}),
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.detail || 'Error al cancelar suscripción');
+    }
     return res.json();
 }

@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useWorkspaceStore } from '../store/workspaceStore';
+import { useAuthStore } from '../store/Store';
 import { API_URL } from '../lib/constants';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import UpgradeModal from './UpgradeModal';
 
 interface Insight {
   id: number;
@@ -19,9 +21,13 @@ interface Insight {
 
 export default function InsightsPanel() {
   const { currentWorkspace } = useWorkspaceStore();
+  const { user } = useAuthStore();
   const [insights, setInsights] = useState<Insight[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isPremiumBlocked, setIsPremiumBlocked] = useState(false);
 
   const loadInsights = useCallback(async () => {
     if (!currentWorkspace) return;
@@ -29,9 +35,18 @@ export default function InsightsPanel() {
       const res = await fetch(`${API_URL}/insights/?workspace_id=${currentWorkspace.id}`, {
         credentials: 'include',
       });
+      
+      if (res.status === 403) {
+        // El workspace no tiene plan Premium
+        setIsPremiumBlocked(true);
+        setInsights([]);
+        return;
+      }
+      
       if (res.ok) {
         const data = await res.json();
         setInsights(data);
+        setIsPremiumBlocked(false);
       }
     } catch (error) {
       console.error('Error loading insights:', error);
@@ -40,16 +55,34 @@ export default function InsightsPanel() {
 
   const generateInsights = async () => {
     if (!currentWorkspace) return;
+    
+    // Validación híbrida: user es premium O workspace es premium
+    const hasUserPremium = user?.plan === "premium";
+    const hasWorkspacePremium = currentWorkspace.plan === "premium";
+    
+    if (!hasUserPremium && !hasWorkspacePremium) {
+      setShowUpgradeModal(true);
+      return;
+    }
+    
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/insights/generate?workspace_id=${currentWorkspace.id}`, {
         method: 'POST',
         credentials: 'include',
       });
+      
+      if (res.status === 403) {
+        setShowUpgradeModal(true);
+        return;
+      }
+      
       if (res.ok) {
         const data = await res.json();
         toast.success(data.message);
         loadInsights();
+      } else {
+        toast.error('Error al generar sugerencias');
       }
     } catch (error) {
       console.error('Error generating insights:', error);
@@ -115,7 +148,7 @@ export default function InsightsPanel() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="relative">
+        <Button variant="outline" className="relative hover:text-info">
           🔔 Sugerencias
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -193,6 +226,12 @@ export default function InsightsPanel() {
           )}
         </div>
       </DialogContent>
+      
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        featureName="Sugerencias Inteligentes con IA"
+      />
     </Dialog>
   );
 }

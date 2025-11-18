@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useWorkspaceStore } from '../store/workspaceStore';
+import { useAuthStore } from '../store/Store';
 import { getWorkspaceMembers, addWorkspaceMember, removeWorkspaceMember } from '../lib/api';
 import { API_URL } from '../lib/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { toast } from 'sonner';
 
 interface Member {
   user_id: number;
@@ -18,6 +20,7 @@ interface Member {
 
 export default function MemberManager() {
   const { currentWorkspace } = useWorkspaceStore();
+  const { user } = useAuthStore();
   const [members, setMembers] = useState<Member[]>([]);
   const [email, setEmail] = useState('');
   const [open, setOpen] = useState(false);
@@ -42,15 +45,23 @@ export default function MemberManager() {
     e.preventDefault();
     if (!currentWorkspace || !email) return;
 
+    // Validar límite de miembros para plan Free
+    if (user?.plan === 'free') {
+      if (members.length >= 2) {
+        toast.error('Plan Free permite máximo 2 miembros. Actualiza a Premium para agregar más.');
+        return;
+      }
+    }
+
     try {
       const result = await addWorkspaceMember(API_URL, currentWorkspace.id, email);
       setEmail('');
       loadMembers();
-      alert(result.message || 'Invitación enviada exitosamente');
+      toast.success(result.message || 'Invitación enviada exitosamente');
     } catch (error: unknown) {
       console.error('Error adding member:', error);
       const errorMsg = error instanceof Error ? error.message : 'Error al enviar invitación';
-      alert(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
@@ -68,7 +79,7 @@ export default function MemberManager() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Gestionar Miembros</Button>
+        <Button variant="outline" size="sm" className="text-xs md:text-sm hover:text-info">👥 <span className=" md:inline">Miembros</span></Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
@@ -82,12 +93,23 @@ export default function MemberManager() {
                 placeholder="Email del usuario a invitar"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={user?.plan === 'free' && members.length >= 2}
               />
-              <Button type="submit">Invitar</Button>
+              <Button 
+                type="submit"
+                disabled={user?.plan === 'free' && members.length >= 2}
+              >
+                Invitar
+              </Button>
             </div>
             <p className="text-xs text-gray-500">
               Si el usuario no tiene cuenta, recibirá un email para registrarse y unirse automáticamente.
             </p>
+            {user?.plan === 'free' && members.length >= 2 && (
+              <p className="text-xs text-red-600 font-semibold">
+                ⚠️ Límite alcanzado: Plan Free permite máximo 2 miembros. Actualiza a Premium para agregar más.
+              </p>
+            )}
           </form>
           <div className="space-y-2">
             <h4 className="font-semibold">Miembros actuales:</h4>

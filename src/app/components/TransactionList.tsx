@@ -48,7 +48,7 @@ export default function TransactionList() {
                 {transaction.category_name || 'Sin categoría'} • {transaction.username}
               </p>
             </div>
-            <Button variant="destructive" size="sm" onClick={() => setDeleteId(transaction.id)}>
+            <Button variant="destructive" size="sm" onClick={() => setDeleteId(transaction.id)} className="cursor-pointer">
               Eliminar
             </Button>
           </div>

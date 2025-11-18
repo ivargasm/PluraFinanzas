@@ -204,7 +204,7 @@ export default function RecurringManager() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className='cursor-pointer'>Gastos Fijos</Button>
+        <Button variant="outline" size="sm" className='text-xs md:text-sm hover:text-info'>📅 <span className=' md:inline'>Gastos Fijos</span></Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>

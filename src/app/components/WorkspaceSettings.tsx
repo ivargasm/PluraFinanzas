@@ -29,7 +29,7 @@ export default function WorkspaceSettings() {
     try {
       await updateWorkspace(API_URL, currentWorkspace.id, {
         name,
-        monthly_budget: budget ? parseFloat(budget) : null,
+        monthly_budget: budget ? parseFloat(budget) : undefined,
       });
       setOpen(false);
       fetchWorkspaces();
@@ -42,7 +42,7 @@ export default function WorkspaceSettings() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Configuración</Button>
+        <Button variant="outline" size="sm" className="text-xs md:text-sm hover:text-info">⚙️ <span className=" md:inline">Config</span></Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

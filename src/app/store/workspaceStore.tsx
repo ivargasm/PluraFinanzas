@@ -7,6 +7,7 @@ interface Workspace {
   owner_id: number;
   monthly_budget: number | null;
   created_at: string;
+  plan: 'free' | 'premium';
 }
 
 interface WorkspaceState {

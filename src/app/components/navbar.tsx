@@ -36,7 +36,7 @@ export default function Navbar() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/#precios" className="text-gray-700 dark:text-teal-100 hover:text-teal-700 dark:hover:text-white transition">
+                                <Link href="/pricing" className="text-gray-700 dark:text-teal-100 hover:text-teal-700 dark:hover:text-white transition">
                                     Precios
                                 </Link>
                             </li>
@@ -70,6 +70,11 @@ export default function Navbar() {
                                 </Link>
                             </li>
                             <li>
+                                <Link href="/pricing" className="text-gray-700 dark:text-teal-100 hover:text-teal-700 dark:hover:text-white transition">
+                                    Planes
+                                </Link>
+                            </li>
+                            <li>
                                 <Link href="/profile" className="text-gray-700 dark:text-teal-100 hover:text-teal-700 dark:hover:text-white transition">
                                     Perfil
                                 </Link>
@@ -96,7 +101,7 @@ export default function Navbar() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/#precios" className="text-gray-700 dark:text-teal-100" onClick={() => setMenuOpen(false)}>
+                                    <Link href="/pricing" className="text-gray-700 dark:text-teal-100" onClick={() => setMenuOpen(false)}>
                                         Precios
                                     </Link>
                                 </li>
@@ -127,6 +132,11 @@ export default function Navbar() {
                                 <li>
                                     <Link href="/dashboard/reports" className="text-gray-700 dark:text-teal-100" onClick={() => setMenuOpen(false)}>
                                         Reportes
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/pricing" className="text-gray-700 dark:text-teal-100" onClick={() => setMenuOpen(false)}>
+                                        Planes
                                     </Link>
                                 </li>
                                 <li>

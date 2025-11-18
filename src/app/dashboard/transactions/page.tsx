@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/Store';
 import { useWorkspaceStore } from '../../store/workspaceStore';
 import { useDataStore } from '../../store/dataStore';
+import UpgradeModal from '../../components/UpgradeModal';
 
 interface Transaction {
   id: number;
@@ -28,7 +29,7 @@ import { toast } from 'sonner';
 import ConfirmDialog from '../../components/ConfirmDialog';
 
 export default function TransactionsPage() {
-  const { userAuth, userValid } = useAuthStore();
+  const { userAuth, userValid, user } = useAuthStore();
   const { currentWorkspace } = useWorkspaceStore();
   const { transactions, categories, fetchTransactions, dateFilter } = useDataStore();
   const router = useRouter();
@@ -41,6 +42,12 @@ export default function TransactionsPage() {
   const [editDescription, setEditDescription] = useState('');
   const [editCategory, setEditCategory] = useState('');
   const [editDate, setEditDate] = useState('');
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  // Validación híbrida: usuario es premium O workspace es premium
+  const hasUserPremium = user?.plan === 'premium';
+  const hasWorkspacePremium = currentWorkspace?.plan === 'premium';
+  const canExportCSV = hasUserPremium || hasWorkspacePremium;
 
   useEffect(() => {
     userValid();
@@ -110,8 +117,14 @@ export default function TransactionsPage() {
       );
       toast.success('Archivo descargado');
     } catch (error) {
-      console.error('Error exporting:', error);
-      toast.error('Error al exportar datos');
+      // Manejar error 403 (Premium required)
+      if ((error as Error & { status?: number })?.status === 403) {
+        setShowUpgradeModal(true);
+        toast.error('Descargar CSV requiere plan Premium');
+      } else {
+        console.error('Error exporting:', error);
+        toast.error('Error al exportar datos');
+      }
     }
   };
 
@@ -167,7 +180,11 @@ export default function TransactionsPage() {
               <span className="font-semibold">Total:</span> ${totalAmount.toFixed(2)} 
               <span className="text-teal-700 dark:text-teal-200 ml-4">({filteredTransactions.length} transacciones)</span>
             </p>
-            <Button onClick={handleExport} className="bg-teal-700 hover:bg-teal-800 text-white">
+            <Button 
+              onClick={handleExport} 
+              disabled={!canExportCSV}
+              className={canExportCSV ? "bg-teal-700 hover:bg-teal-800 text-white" : "bg-gray-400 cursor-not-allowed"}
+            >
               📄 Exportar CSV
             </Button>
           </div>
@@ -305,6 +322,12 @@ export default function TransactionsPage() {
           </div>
         )}
       </div>
+      
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        featureName="Exportar a CSV"
+      />
     </div>
   );
 }

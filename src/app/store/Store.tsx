@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { API_URL } from '../lib/constants';
 
 interface AuthState {
-    user: { id: string; username: string; email: string; role: string } | null;
+    user: { id: string; username: string; email: string; role: string; plan: string; subscription_status?: string; subscription_id?: string; subscription_ends_at?: string; stripe_customer_id?: string } | null;
     setUser: (user: AuthState['user']) => void;
     logout: () => void;
     url: string;

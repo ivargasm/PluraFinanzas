@@ -92,7 +92,7 @@ export default function BudgetOverview() {
             variant={viewPeriod === 'weekly' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setViewPeriod('weekly')}
-            className="text-xs px-2 py-1 h-7"
+            className="text-xs px-2 py-1 h-7 hover:text-info"
           >
             Semanal
           </Button>
@@ -100,7 +100,7 @@ export default function BudgetOverview() {
             variant={viewPeriod === 'biweekly' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setViewPeriod('biweekly')}
-            className="text-xs px-2 py-1 h-7"
+            className="text-xs px-2 py-1 h-7 hover:text-info"
           >
             Quincenal
           </Button>
@@ -108,7 +108,7 @@ export default function BudgetOverview() {
             variant={viewPeriod === 'monthly' ? 'default' : 'outline'}
             size="sm"
             onClick={() => setViewPeriod('monthly')}
-            className="text-xs px-2 py-1 h-7"
+            className="text-xs px-2 py-1 h-7 hover:text-info"
           >
             Mensual
           </Button>
