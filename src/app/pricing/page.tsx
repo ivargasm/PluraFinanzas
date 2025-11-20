@@ -32,7 +32,7 @@ const pricingPlans = [
   },
   {
     name: "Plan Premium",
-    price: "$9.99",
+    price: "$100 MXN",
     period: "/mes",
     description: "Todo lo que necesitas",
     cta: "Actualizar a Premium",

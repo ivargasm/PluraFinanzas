@@ -132,7 +132,7 @@ export default function LandingPage() {
               <h3 className="text-2xl font-bold text-teal-900 mb-4">Dashboard Web Completo</h3>
               <div className="mb-6">
                 <p className="text-lg font-bold text-coral-500 mb-2">Premium</p>
-                <p className="text-4xl font-bold text-teal-900">$9.99 <span className="text-lg text-gray-500">/mes</span></p>
+                <p className="text-4xl font-bold text-teal-900">$100 MXN <span className="text-lg text-gray-500">/mes</span></p>
               </div>
               <ul className="space-y-2 text-gray-700 mb-6">
                 <li>• Gastos ilimitados</li>
