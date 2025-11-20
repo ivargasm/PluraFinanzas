@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "../../store/Store";
+// Nota: Asegúrate de que la ruta a tu store sea correcta en tu proyecto
+import { useAuthStore } from "../../store/Store"; 
 import Link from "next/link"
 import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -21,7 +22,10 @@ export default function LoginPage() {
 
     useEffect(() => {
         const validateUser = async () => {
-            await userValid();
+            // Verificamos si la función existe antes de llamarla para evitar errores en tiempo de ejecución
+            if (userValid) {
+                await userValid();
+            }
         };
         validateUser();
     }, [userValid]);
@@ -41,9 +45,16 @@ export default function LoginPage() {
             router.push("/profile");
         } catch (err: unknown) {
             if (err instanceof Error) {
+                // --- CORRECCIÓN IMPORTANTE ---
+                // Next.js utiliza un error con el mensaje "NEXT_REDIRECT" para manejar redirecciones
+                // en Server Actions o funciones del servidor. Si atrapamos este error,
+                // detenemos la navegación. Debemos volver a lanzarlo.
+                if (err.message.includes("NEXT_REDIRECT")) {
+                    throw err;
+                }
                 setError(err.message);
             } else {
-                setError("An unknown error occurred");
+                setError("Ocurrió un error desconocido");
             }
         }
     };
@@ -51,9 +62,14 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-white dark:bg-gray-900">
 
-            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-            <form onSubmit={handleLogin}>
-                <Card className="w-full max-w-md shadow-lg bg-white dark:bg-gray-800">
+            <form onSubmit={handleLogin} className="w-full max-w-md">
+                {error && (
+                    <div className="absolute top-10 w-full max-w-md mx-auto bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 z-50" role="alert">
+                        <strong className="font-bold">Error: </strong>
+                        <span className="block sm:inline">{error}</span>
+                    </div>
+                )}
+                <Card className="w-full shadow-lg bg-white dark:bg-gray-800">
                     <CardHeader className="space-y-1">
                         <CardTitle className="text-2xl font-bold text-center text-gray-900 dark:text-white">Iniciar sesión</CardTitle>
                         <CardDescription className="text-center text-gray-500 dark:text-gray-400">
