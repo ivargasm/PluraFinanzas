@@ -13,7 +13,7 @@ interface Transaction {
   description: string | null;
   date: string;
   workspace_id: number;
-  category_id: number | null;
+  category_id: number | string | null;
   user_id: number;
   username: string;
   category_name: string | null;

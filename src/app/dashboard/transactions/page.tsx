@@ -12,7 +12,7 @@ interface Transaction {
   description: string | null;
   date: string;
   workspace_id: number;
-  category_id: number | null;
+  category_id: number | string | null;
   user_id: number;
   username: string;
   category_name: string | null;
@@ -90,7 +90,7 @@ export default function TransactionsPage() {
         body: JSON.stringify({
           amount: parseFloat(editAmount),
           description: editDescription,
-          category_id: editCategory ? parseInt(editCategory) : null,
+          category_id: editCategory ? (editCategory.startsWith('default_') ? editCategory : parseInt(editCategory)) : null,
           date: editDate,
           workspace_id: currentWorkspace.id,
         }),
@@ -133,7 +133,8 @@ export default function TransactionsPage() {
       t.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       t.username.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = !filterCategory || t.category_id === parseInt(filterCategory);
+    const matchesCategory = !filterCategory || 
+      (filterCategory.startsWith('default_') ? t.category_id === filterCategory : t.category_id === parseInt(filterCategory));
 
     return matchesSearch && matchesCategory;
   });

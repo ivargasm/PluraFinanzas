@@ -27,7 +27,7 @@ export default function TransactionForm() {
         amount: parseFloat(amount),
         description,
         workspace_id: currentWorkspace.id,
-        category_id: categoryId ? parseInt(categoryId) : null,
+        category_id: categoryId ? (categoryId.startsWith('default_') ? categoryId : parseInt(categoryId)) : null,
         date: new Date(date).toISOString(),
       });
       setAmount('');

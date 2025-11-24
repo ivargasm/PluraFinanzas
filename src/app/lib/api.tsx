@@ -182,7 +182,7 @@ export async function createRecurringTransaction(url: string, data: {
     description?: string;
     day_of_month: number;
     workspace_id: number;
-    category_id?: number | null;
+    category_id?: number | string | null;
 }) {
     const res = await fetch(`${url}/recurring/`, {
         method: "POST",

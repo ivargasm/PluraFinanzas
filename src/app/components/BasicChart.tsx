@@ -10,7 +10,7 @@ export default function BasicChart() {
 
   const data = categories.map((category) => {
     const total = transactions
-      .filter((t) => t.category_id === category.id)
+      .filter((t) => String(t.category_id) === String(category.id))
       .reduce((sum, t) => sum + t.amount, 0);
     return { name: category.name, value: total };
   }).filter((item) => item.value > 0);

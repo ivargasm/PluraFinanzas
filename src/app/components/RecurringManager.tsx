@@ -17,7 +17,7 @@ interface RecurringTransaction {
   amount: number;
   description: string | null;
   day_of_month: number;
-  category_id: number | null;
+  category_id: number | string | null;
   category_name: string | null;
   is_active: boolean;
 }
@@ -74,7 +74,7 @@ export default function RecurringManager() {
         description,
         day_of_month: parseInt(dayOfMonth),
         workspace_id: currentWorkspace.id,
-        category_id: categoryId ? parseInt(categoryId) : null,
+        category_id: categoryId ? (categoryId.startsWith('default_') ? categoryId : parseInt(categoryId)) : null,
       });
       setName('');
       setAmount('');
@@ -187,7 +187,7 @@ export default function RecurringManager() {
           description: editDescription,
           day_of_month: parseInt(editDayOfMonth),
           workspace_id: currentWorkspace.id,
-          category_id: editCategoryId ? parseInt(editCategoryId) : null,
+          category_id: editCategoryId ? (editCategoryId.startsWith('default_') ? editCategoryId : parseInt(editCategoryId)) : null,
         }),
       });
       if (res.ok) {
