@@ -11,68 +11,68 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="text-white">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Tus finanzas, por fin<br />
-              <span className="text-teal-200">en sintonía grupal</span>
-            </h1>
-            <p className="text-xl mb-4 text-teal-50">
-              PluraFinanzas es te app que te permite gensitar gastos compartidos y personales sin efoutto
-            </p>
-            <p className="text-lg text-coral-300 mb-8">
-              Registra gastos en segundos desde tu chat de WhatsApp o Telegram
-            </p>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                Tus finanzas, por fin<br />
+                <span className="text-teal-200">en sintonía grupal</span>
+              </h1>
+              <p className="text-xl mb-4 text-teal-50">
+                PluraFinanzas es una app que te permite gestionar gastos compartidos y personales sin esfuerzo
+              </p>
+              <p className="text-lg text-coral-300 mb-8">
+                Registra gastos en segundos desde tu chat de WhatsApp o Telegram
+              </p>
 
-            {/* Pain Points */}
-            <div className="mb-8">
-              <p className="text-lg mb-4 text-teal-100">¿Cansado de la gestión financiras tradicionals?</p>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-white/10 rounded-full flex items-center justify-center">
-                    <span className="text-3xl">💸</span>
+              {/* Pain Points */}
+              <div className="mb-8">
+                <p className="text-lg mb-4 text-teal-100">¿Cansado de la gestión financiera tradicional?</p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-2 bg-white/10 rounded-full flex items-center justify-center">
+                      <span className="text-3xl">💸</span>
+                    </div>
+                    <p className="text-sm text-teal-100">Perder la cuenta</p>
                   </div>
-                  <p className="text-sm text-teal-100">Perder la cuenta</p>
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-2 bg-white/10 rounded-full flex items-center justify-center">
+                      <span className="text-3xl">😓</span>
+                    </div>
+                    <p className="text-sm text-teal-100">Pereza de registrar</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-2 bg-white/10 rounded-full flex items-center justify-center">
+                      <span className="text-3xl">🧮</span>
+                    </div>
+                    <p className="text-sm text-teal-100">Hojas la cálculo complicadas</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-white/10 rounded-full flex items-center justify-center">
-                    <span className="text-3xl">😓</span>
+              </div>
+            </div>
+
+            {/* Mockup */}
+            <div className="relative">
+              <div className="relative z-10">
+                {/* Desktop mockup placeholder */}
+                <div className="bg-white rounded-lg shadow-2xl p-4 mb-8">
+                  <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+                    <span className="text-gray-400">Dashboard Preview</span>
                   </div>
-                  <p className="text-sm text-teal-100">Pereza de registrar</p>
                 </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-2 bg-white/10 rounded-full flex items-center justify-center">
-                    <span className="text-3xl">🧮</span>
+                {/* Mobile mockups */}
+                <div className="absolute -left-8 bottom-0 w-32 bg-white rounded-2xl shadow-xl p-2">
+                  <div className="bg-gray-100 rounded-xl h-48 flex items-center justify-center">
+                    <span className="text-xs text-gray-400">Mobile</span>
                   </div>
-                  <p className="text-sm text-teal-100">Hojas la cálculo complicadas</p>
+                </div>
+                <div className="absolute -right-8 bottom-12 w-32 bg-white rounded-2xl shadow-xl p-2">
+                  <div className="bg-gray-100 rounded-xl h-48 flex items-center justify-center">
+                    <span className="text-xs text-gray-400">Mobile</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Mockup */}
-          <div className="relative">
-            <div className="relative z-10">
-              {/* Desktop mockup placeholder */}
-              <div className="bg-white rounded-lg shadow-2xl p-4 mb-8">
-                <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
-                  <span className="text-gray-400">Dashboard Preview</span>
-                </div>
-              </div>
-              {/* Mobile mockups */}
-              <div className="absolute -left-8 bottom-0 w-32 bg-white rounded-2xl shadow-xl p-2">
-                <div className="bg-gray-100 rounded-xl h-48 flex items-center justify-center">
-                  <span className="text-xs text-gray-400">Mobile</span>
-                </div>
-              </div>
-              <div className="absolute -right-8 bottom-12 w-32 bg-white rounded-2xl shadow-xl p-2">
-                <div className="bg-gray-100 rounded-xl h-48 flex items-center justify-center">
-                  <span className="text-xs text-gray-400">Mobile</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         </div>
       </section>
 
@@ -159,7 +159,7 @@ export default function LandingPage() {
             de tus financas<br />
             grupales hoy
           </h3>
-          <Link 
+          <Link
             href="/auth/register"
             className="inline-block bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white px-12 py-4 rounded-lg text-xl font-bold transition shadow-lg hover:shadow-xl"
           >
